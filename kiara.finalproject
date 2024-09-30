@@ -1,0 +1,271 @@
+Project Part [3]
+The project involves creating a fitness tracker program that allows users to log workouts, set goals, and track progress. Users can view their 
+logged workouts, set goals, and check progress entries. The program includes functionality to save and load data from a file. The core inputs 
+are user choices and various data entries for workouts, goals, and progress. The program processes these inputs to update lists, display 
+information, and manage file operations for data persistence.
+
+Table of Contents
+Statement of Independent Effort
+Analysis of Specifications
+Main
+Pseudocode
+Flowchart
+Test Cases
+Code
+User Manual
+References
+
+##Statement of Independent Effort
+
+I, [KIARA PEE], hereby certify that this is my original work completed with the assistance of the resources listed in the reference. I used these resources in the following areas: [Functions regarding saving to files and verifying. ].
+
+Analysis of Specifications
+
+
+Inputs:
+- User choice (int)
+
+Processes:
+- Log Workout: Collect data and append it to the vector.
+- View Workouts: Display logged workouts.
+- Set Goal: Collect goal data and append it to the vector.
+- View Goals: Display set goals.
+- Log Progress: Collect progress data and append it to the vector.
+- View Progress: Display logged progress.
+- Save/Load Data: Write/read records to/from a file.
+
+Outputs:
+- Confirmation messages for data logging, viewing, and saving
+- Summary reports for workouts, goals, and progress
+
+| Function      | Input                                                          | Process                                                                  |   Output                                                                  |
+|---------------|----------------------------------------------------------------|--------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Main Program  | User choice (int)                                              | Display menu and handle user choices                                     | Execute corresponding function based on choice                            |
+| logWorkout    | Workout name (string), duration (int), calories burned (int)   | Collect workout details and store them in the workouts vector            | "Workout logged" message                                                  |
+| viewWorkouts  | None                                                           | Display all logged workouts                                              | List of workouts                                                          |
+| setGoal       | Goal description (string)                                      | Collect goal description and store it in the goals vector                | "Goal set" message                                                        |
+| viewGoals     | None                                                           | Display all set goals                                                    | List of goals                                                             |
+| logProgress   | Progress date (string), description (string)                   | Collect progress details and store them in the progressLog vector        | "Progress logged" message                                                 |
+| viewProgress  | None                                                           | Display all logged progress                                              | List of progress entries                                                  |
+| saveToFile    | None (uses vectors: workouts, goals, progressLog)              | Write the contents of vectors to a file                                  | "Data saved to file successfully" or "Error opening file for writing" message     |
+| loadFromFil   | None (initializes vectors: workouts, goals, progressLog)       | Read the contents from a file and store them in vectors                  | Data loaded into vectors or "No existing file found, starting a new file" message |
+
+
+Pseudocode
+        START
+
+  DECLARE vector workouts
+  DECLARE vector goals
+  DECLARE vector progressLog
+  DECLARE integer choice
+
+  // Load data from file
+  CALL loadFromFile with workouts, goals, progressLog
+
+  // Main menu loop
+  DO
+    DISPLAY "Fitness Tracker Menu:"
+    DISPLAY "1. Log Workout"
+    DISPLAY "2. View Workouts"
+    DISPLAY "3. Set Goal"
+    DISPLAY "4. View Goals"
+    DISPLAY "5. Log Progress"
+    DISPLAY "6. View Progress"
+    DISPLAY "7. Save and Exit"
+    DISPLAY "Enter your choice: "
+
+    INPUT choice
+
+    SWITCH choice
+      CASE 1:
+        // Log Workout
+        CALL logWorkout with workouts
+      CASE 2:
+        // View Workouts
+        CALL viewWorkouts with workouts
+      CASE 3:
+        // Set Goal
+        CALL setGoal with goals
+      CASE 4:
+        // View Goals
+        CALL viewGoals with goals
+      CASE 5:
+        // Log Progress
+        CALL logProgress with progressLog
+      CASE 6:
+        // View Progress
+        CALL viewProgress with progressLog
+      CASE 7:
+        // Save and Exit
+        CALL saveToFile with workouts, goals, progressLog
+        DISPLAY "Data saved. Exiting..."
+        EXIT program
+      DEFAULT:
+        DISPLAY "Invalid choice. Please try again."
+    END SWITCH
+  UNTIL choice is 7
+
+END
+
+// Function to log a workout
+FUNCTION logWorkout (vector workouts)
+  DECLARE Workout workout
+  DISPLAY "Enter workout name: "
+  INPUT workout.name
+  DISPLAY "Enter duration (minutes): "
+  INPUT workout.duration
+  DISPLAY "Enter calories burned: "
+  INPUT workout.caloriesBurned
+  ADD workout to workouts
+  DISPLAY "Workout logged."
+END FUNCTION
+
+// Function to view workouts
+FUNCTION viewWorkouts (vector workouts)
+  DISPLAY "Logged Workouts:"
+  FOR EACH workout IN workouts
+    DISPLAY "Workout: " + workout.name + ", Duration: " + workout.duration + " mins, Calories Burned: " + workout.caloriesBurned
+  END FOR
+END FUNCTION
+
+// Function to set a goal
+FUNCTION setGoal (vector goals)
+  DECLARE Goal goal
+  DISPLAY "Enter goal description: "
+  INPUT goal.description
+  SET goal.completed TO false
+  ADD goal to goals
+  DISPLAY "Goal set."
+END FUNCTION
+
+// Function to view goals
+FUNCTION viewGoals (vector goals)
+  DISPLAY "Set Goals:"
+  FOR EACH goal IN goals
+    DISPLAY "Goal: " + goal.description + ", Completed: " + (goal.completed ? "Yes" : "No")
+  END FOR
+END FUNCTION
+
+// Function to log progress
+FUNCTION logProgress (vector progressLog)
+  DECLARE Progress progress
+  DISPLAY "Enter progress date (YYYY-MM-DD): "
+  INPUT progress.date
+  DISPLAY "Enter progress description: "
+  INPUT progress.description
+  ADD progress to progressLog
+  DISPLAY "Progress logged."
+END FUNCTION
+
+// Function to view progress
+FUNCTION viewProgress (vector progressLog)
+  DISPLAY "Logged Progress:"
+  FOR EACH progress IN progressLog
+    DISPLAY "Date: " + progress.date + ", Description: " + progress.description
+  END FOR
+END FUNCTION
+
+// Function to save data to file
+FUNCTION saveToFile (vector workouts, vector goals, vector progressLog)
+  OPEN file "data.txt" FOR writing
+
+  IF file is open THEN
+    FOR EACH workout IN workouts
+      WRITE "W," + workout.name + "," + workout.duration + "," + workout.caloriesBurned + "\n" TO file
+    END FOR
+    FOR EACH goal IN goals
+      WRITE "G," + goal.description + "," + goal.completed + "\n" TO file
+    END FOR
+    FOR EACH progress IN progressLog
+      WRITE "P," + progress.date + "," + progress.description + "\n" TO file
+    END FOR
+    CLOSE file
+    DISPLAY "Data saved to file successfully."
+  ELSE
+    DISPLAY "Error opening file for writing."
+  END IF
+END FUNCTION
+
+// Function to load data from file
+FUNCTION loadFromFile (vector workouts, vector goals, vector progressLog)
+  OPEN file "data.txt" FOR reading
+
+  IF file is open THEN
+    WHILE NOT end of file
+      READ line FROM file
+      DECLARE stringstream ss initialized with line
+      DECLARE string type
+      READ type FROM ss WITH delimiter ','
+
+      IF type is "W" THEN
+        DECLARE Workout workout
+        READ workout.name FROM ss WITH delimiter ','
+        READ workout.duration FROM ss WITH delimiter ','
+        READ workout.caloriesBurned FROM ss WITH delimiter ','
+        ADD workout to workouts
+      ELSE IF type is "G" THEN
+        DECLARE Goal goal
+        READ goal.description FROM ss WITH delimiter ','
+        READ goal.completed FROM ss WITH delimiter ','
+        ADD goal to goals
+      ELSE IF type is "P" THEN
+        DECLARE Progress progress
+        READ progress.date FROM ss WITH delimiter ','
+        READ progress.description FROM ss WITH delimiter ','
+        ADD progress to progressLog
+      END IF
+    END WHILE
+    CLOSE file
+  ELSE
+    DISPLAY "No existing file found, starting a new file."
+  END IF
+END FUNCTION
+
+END
+
+ 
+Flowchart
+https://lucid.app/publicSegments/view/5d035eec-879a-461b-9440-e2aabe2972ea/image.pdf
+
+Test Cases
+
+
+Case # | Case Description                          | Input                                                               | Condition                             | Output
+-------|-------------------------------------------|---------------------------------------------------------------------|---------------------------------------|-------------------------------------------------------------
+1      | Log a workout with minimum values         | Name: "Walking", Duration: 1, Calories: 0                           | -                                     | "Workout logged" message
+2      | Log a workout with maximum values         | Name: "Marathon", Duration: 1440 (24 hours), Calories: 10000        | -                                     | "Workout logged" message
+3      | Set a goal with a very long description   | Description: "100 pushups"in one go"                                | -                                      | "Goal set" message
+4      | Log progress with an invalid date format  | Date: "2024-02-30", Description: "Completed 10K run"                | Invalid date format                   | "Progress logged" message (assuming error handling in place)
+5      | Save data when file is not accessible     | None                                                                | File is not accessible for writing    | "Error opening file for writing" message
+
+https://codio.com/home/projects?sharedToken=7707b960-b548-4082-a9ac-7dce649d2a56
+
+
+User Manual
+/workspaces/course-project-kiara-05/GUIDE.md
+
+Updated: [8/2/2024]
+
+References
+List all references in APA 7 Format.
+
+1. ProgrammingKnowledge. (n.d.). *Function overloading in C++*. Retrieved from [https://www.programmingknowledge.in/2021/06/function-overloading-in-cpp.html](https://www.programmingknowledge.in/2021/06/function-overloading-in-cpp.html)
+
+2. LearnCpp. (n.d.). *Understanding function prototypes in C++*. Retrieved from [https://www.learncpp.com/cpp-tutorial/7-6-function-prototypes/](https://www.learncpp.com/cpp-tutorial/7-6-function-prototypes/)
+
+3. A. J. (2020). *Arrays vs vectors in C++: A comprehensive guide*. Retrieved from [https://www.cplusplus.com/forum/beginner/262339/](https://www.cplusplus.com/forum/beginner/262339/)
+
+4. C++ Resources. (n.d.). *Efficient use of vectors and arrays in C++*. Retrieved from [https://www.cppresources.com/efficient-use-of-vectors-and-arrays-in-cpp/](https://www.cppresources.com/efficient-use-of-vectors-and-arrays-in-cpp/)
+
+5. CodeProject. (n.d.). *Advanced file handling in C++*. Retrieved from [https://www.codeproject.com/Articles/54767/Advanced-File-Handling-in-C](https://www.codeproject.com/Articles/54767/Advanced-File-Handling-in-C)
+
+6. P. S. (2021). *File I/O in C++ for beginners*. Retrieved from [https://www.cplusplus.com/doc/tutorial/files/](https://www.cplusplus.com/doc/tutorial/files/)
+
+7. P. L. (2021). *Modular programming in C++: Best practices*. Retrieved from [https://www.codeguru.com/cpp/cpp/cpp_mfc/article.php/c25387](https://www.codeguru.com/cpp/cpp/cpp_mfc/article.php/c25387)
+
+8. G. T. (2022). *Designing and implementing functions in C++*. Retrieved from [https://www.geeksforgeeks.org/designing-and-implementing-functions-in-c/](https://www.geeksforgeeks.org/designing-and-implementing-functions-in-c/)
+
+9. LearnCPP. (n.d.). *Managing complex data structures with vectors*. Retrieved from [https://www.learncpp.com/cpp-tutorial/12-2-vectors/](https://www.learncpp.com/cpp-tutorial/12-2-vectors/)
+
+10. CPlusPlus.com. (n.d.). *Arrays and vectors: In-depth analysis*. Retrieved from [http://www.cplusplus.com/doc/oldtutorial/](http://www.cplusplus.com/doc/oldtutorial/)
+
